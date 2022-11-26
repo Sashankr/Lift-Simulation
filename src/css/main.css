@@ -42,6 +42,14 @@ input {
   flex-direction: column;
 }
 
+.lift-simulator__home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
 .lift-simulator__input {
   padding: 5px 10px;
   font-size: 1rem;
