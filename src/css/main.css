@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --font-primary: "Bebas Neue", cursive;
+  --font-secondary: "Inter", sans-serif;
+  --color-dark-800: #212529;
+}
+
+.page-heading {
+  font-family: var(--font-primary);
+  font-size: 4rem;
+  letter-spacing: 2px;
+  text-align: center;
+  color: var(--color-dark-800);
+}
+.page-description {
+  font-family: var(--font-secondary);
+  text-align: center;
+}
