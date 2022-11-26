@@ -11,6 +11,13 @@
   --font-primary: "Bebas Neue", cursive;
   --font-secondary: "Inter", sans-serif;
   --color-dark-800: #212529;
+  --color-gray-400: #dddddd;
+  --base-transition: 0.4s ease;
+}
+
+label,
+input {
+  font-family: var(--font-secondary);
 }
 
 .page-heading {
@@ -23,4 +30,31 @@
 .page-description {
   font-family: var(--font-secondary);
   text-align: center;
+}
+
+.lift-simulator__information {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.lift-simulator__input {
+  padding: 5px 10px;
+  font-size: 1rem;
+  border-radius: 10px;
+  margin-top: 5px;
+  min-width: 250px;
+  border: 2px solid var(--color-gray-400);
+  transition: var(--base-transition);
+}
+
+.lift-simulator__input:focus {
+  border-color: var(--color-dark-800);
+}
+
+.lift-simulator__input-container {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
 }

@@ -12,11 +12,36 @@
     <link rel="stylesheet" href="./css/main.css" />
   </head>
   <body>
-    <main>
+    <main class="lift-simulator">
       <h1 class="page-heading">Lift Simulator</h1>
       <article class="page-description">
         <p>A web application that replicates the mechanics of a lift.</p>
       </article>
+      <form class="lift-simulator__information">
+        <div class="lift-simulator__input-container">
+          <label for="floors">Enter number of floors</label>
+          <input
+            class="lift-simulator__input"
+            name="floors"
+            type="number"
+            min="1"
+            max="10"
+            required
+          />
+        </div>
+        <div class="lift-simulator__input-container">
+          <label for="lifts">Enter number of lifts</label>
+          <input
+            class="lift-simulator__input"
+            name="lifts"
+            type="number"
+            min="1"
+            max="10"
+            required
+          />
+        </div>
+        <button>Simulate</button>
+      </form>
     </main>
   </body>
 </html>
