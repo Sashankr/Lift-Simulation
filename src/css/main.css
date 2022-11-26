@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --font-primary: "Bebas Neue", cursive;
+  --font-secondary: "Inter", sans-serif;
+  --color-dark-800: #212529;
+  --color-gray-400: #dddddd;
+  --base-transition: 0.4s ease;
+  --radius-10: 10px;
+}
+
+label,
+input {
+  font-family: var(--font-secondary);
+}
+
+.page-heading {
+  font-family: var(--font-primary);
+  font-size: 4rem;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--color-dark-800);
+}
+.page-description {
+  font-family: var(--font-secondary);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.lift-simulator__information {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.lift-simulator__home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.lift-simulator__input {
+  padding: 5px 10px;
+  font-size: 1rem;
+  border-radius: var(--radius-10);
+  margin-top: 5px;
+  min-width: 250px;
+  border: 2px solid var(--color-gray-400);
+  transition: var(--base-transition);
+}
+
+.lift-simulator__input:focus {
+  border-color: var(--color-dark-800);
+}
+
+.lift-simulator__input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.lift-simulator__button {
+  margin-top: 1rem;
+  padding: 5px 10px;
+  font-size: 1.5rem;
+  font-family: var(--font-primary);
+  border: 2px solid var(--color-gray-400);
+  border-radius: var(--radius-10);
+  cursor: pointer;
+  transition: var(--base-transition);
+}
+
+.lift-simulator__button:hover {
+  background: var(--color-dark-800);
+  border: 2px solid var(--color-dark-800);
+  color: var(--color-gray-400);
+}
