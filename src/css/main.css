@@ -90,6 +90,5 @@ input {
 
 .lift-simulator__home.hide {
   opacity: 0;
-  left: -100%;
-  position: relative;
+  display: none;
 }
