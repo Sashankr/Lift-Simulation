@@ -48,6 +48,7 @@ input {
   align-items: center;
   flex-direction: column;
   height: 100vh;
+  transition: var(--base-transition);
 }
 
 .lift-simulator__input {
@@ -85,4 +86,9 @@ input {
   background: var(--color-dark-800);
   border: 2px solid var(--color-dark-800);
   color: var(--color-gray-400);
+}
+
+.lift-simulator__home.hide {
+  opacity: 0;
+  display: none;
 }
