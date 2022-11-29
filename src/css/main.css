@@ -14,6 +14,8 @@
   --color-gray-400: #dddddd;
   --base-transition: 0.4s ease;
   --radius-10: 10px;
+  --color-purple-600: #7c27ce;
+  --color-light-100: #fff;
 }
 
 label,
@@ -83,8 +85,8 @@ input {
 }
 
 .lift-simulator__button:hover {
-  background: var(--color-dark-800);
-  border: 2px solid var(--color-dark-800);
+  background: var(--color-purple-600);
+  border: 2px solid var(--color-purple-600);
   color: var(--color-gray-400);
 }
 
@@ -106,4 +108,33 @@ input {
   bottom: 0;
   font-size: 1.5rem;
   font-family: var(--font-primary);
+}
+
+.floorButtonContainer {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}
+
+.floorButtonContainer button {
+  padding: 10px 12px;
+  font-family: var(--font-secondary);
+  border: unset;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  color: var(--color-light-100);
+  cursor: pointer;
+  transition: var(--base-transition);
+}
+
+.floorButtonContainer button:hover {
+  opacity: 0.85;
+}
+
+.floorUpButton {
+  background: var(--color-purple-600);
+}
+
+.floorDownButton {
+  background: var(--color-dark-800);
 }
