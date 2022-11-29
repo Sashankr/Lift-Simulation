@@ -28,10 +28,14 @@ const singleFloorUI = (floorCount) => {
     false
   );
   floorContainer.innerHTML = `
-    <div>
+    <div class="floor-content-container">
       <div class="floorButtonContainer ${floorCount}">
       <button class="floorUpButton ${floorCount}">UP</button>
-      <button class="floorDownButton ${floorCount}">DOWN</button>
+      ${
+        floorCount !== 0
+          ? '<button class="floorDownButton ${floorCount}">DOWN</button>'
+          : ""
+      }
       </div>
       <h2 class="floorTitle">Floor ${floorCount}</h2>
     </div>
@@ -43,7 +47,7 @@ const singleFloorUI = (floorCount) => {
 
 const buildInteractiveUI = (liftCount, floorCount) => {
   const liftSimulator = document.querySelector(".lift-simulator");
-  for (let i = floorCount; i > 0; i--) {
+  for (let i = floorCount; i >= 0; i--) {
     const { floorContainer } = singleFloorUI(i);
     appendUIElement(liftSimulator, floorContainer);
   }
