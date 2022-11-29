@@ -47,7 +47,7 @@ const singleFloorUI = (floorCount) => {
 
 const buildInteractiveUI = (liftCount, floorCount) => {
   const liftSimulator = document.querySelector(".lift-simulator");
-  for (let i = floorCount; i >= 0; i--) {
+  for (let i = floorCount; i > 0; i--) {
     const { floorContainer } = singleFloorUI(i);
     appendUIElement(liftSimulator, floorContainer);
   }
