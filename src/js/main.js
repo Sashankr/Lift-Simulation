@@ -73,3 +73,7 @@ const intialUserInputsHandler = (event) => {
     buildInteractiveUI(liftCount, floorCount);
   }
 };
+
+const moveLiftUp = () => {};
+
+// document.querySelectorAll('.floor-up-button').
