@@ -9,7 +9,6 @@ const validateCount = (count) => {
 const createUIElement = (title, className, floorCount, text) => {
   const uiElement = document.createElement(title);
   uiElement.classList.add(className);
-  uiElement.classList.add(floorCount);
   if (text) {
     uiElement.innerText = text;
   }
@@ -20,24 +19,19 @@ const appendUIElement = (parent, child) => {
   parent.appendChild(child);
 };
 
-const singleFloorUI = (floorCount) => {
-  const floorContainer = createUIElement(
-    "div",
-    "floorContainer",
-    floorCount,
-    false
-  );
+const floorUI = (floorCount) => {
+  const floorContainer = createUIElement("div", "floor-container", false);
   floorContainer.innerHTML = `
-    <div class="floor-content-container">
-      <div class="floorButtonContainer ${floorCount}">
-      <button class="floorUpButton ${floorCount}">UP</button>
+    <div class="floor-content-container" data-floor=${floorCount}>
+      <div class="floor-button-container">
+      <button class="floor-up-button" data-up-button="${floorCount}" >UP</button>
       ${
-        floorCount !== 0
-          ? '<button class="floorDownButton ${floorCount}">DOWN</button>'
+        floorCount !== 1
+          ? `<button class="floor-down-button" data-down-button="${floorCount}">DOWN</button>`
           : ""
       }
       </div>
-      <h2 class="floorTitle">Floor ${floorCount}</h2>
+      <h2 class="floor-title">Floor ${floorCount}</h2>
     </div>
   `;
   return {
@@ -45,13 +39,28 @@ const singleFloorUI = (floorCount) => {
   };
 };
 
+const liftUi = (liftCount) => {
+  const liftContainer = createUIElement("div", "lift-container", false);
+  liftContainer.setAttribute("data-lift", liftCount);
+  liftContainer.innerHTML = `
+    <div class="lift-door-1"></div>
+    <div class="lift-door-2"></div>
+  `;
+  return liftContainer;
+};
+
 const buildInteractiveUI = (liftCount, floorCount) => {
   const liftSimulator = document.querySelector(".lift-simulator");
   for (let i = floorCount; i > 0; i--) {
-    const { floorContainer } = singleFloorUI(i);
+    const { floorContainer } = floorUI(i);
     appendUIElement(liftSimulator, floorContainer);
   }
-  for (let j = 0; j <= liftCount; j++) {}
+  const firstFloor = document.querySelector('[data-floor="1"]');
+
+  for (let j = 1; j <= liftCount; j++) {
+    const liftContainer = liftUi(j);
+    appendUIElement(firstFloor, liftContainer);
+  }
 };
 
 const intialUserInputsHandler = (event) => {
@@ -64,3 +73,7 @@ const intialUserInputsHandler = (event) => {
     buildInteractiveUI(liftCount, floorCount);
   }
 };
+
+const moveLiftUp = () => {};
+
+// document.querySelectorAll('.floor-up-button').
