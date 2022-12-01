@@ -3,15 +3,15 @@
 const dataStore = {
   liftCount: 0,  // number of lifts
   floorCount: 0, // number of floors
-  floors: {      // floors object contains all the floors as property and numb 
-    0: {  liftIds : [1] },
-    1: {  liftIds : [2,3] },
-    2: {  liftIds : [] },
+  floors: {      // floors object contains all the floors as property and lifts that are currently on that floor. 
+    0: { liftIds : [1] },
+    1: { liftIds : [2,3] },
+    2: { liftIds : [] },
   },
-  lifts: {
-    0: { floor: 1 },
-    1: { floor: 3 },
-    2: { floor: 0 },
+  lifts: {       // lifts object contains all the lifts as property and floorId at which each lift is currently. 
+    0: { floorId: 1 },
+    1: { floorId: 3 },
+    2: { floorId: 0 },
   },
 };
 
