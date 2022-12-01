@@ -1,9 +1,24 @@
+/*Data Store Design
+
 const dataStore = {
-  liftCount: 0,
-  floorCount: 0,
-  floors: {},
-  lifts: {},
+  liftCount: 0,  // number of lifts
+  floorCount: 0, // number of floors
+  floors: {      // floors object contains all the floors as property and numb 
+    0: {  liftIds : [1] },
+    1: {  liftIds : [2,3] },
+    2: {  liftIds : [] },
+  },
+  lifts: {
+    0: { floor: 1 },
+    1: { floor: 3 },
+    2: { floor: 0 },
+  },
 };
+
+*/
+
+const dataStore = {};
+console.log(dataStore);
 
 const validateCount = (count) => {
   if (count > 10 || count < 0) {
