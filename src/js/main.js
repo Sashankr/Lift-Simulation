@@ -1,3 +1,10 @@
+const dataStore = {
+  liftCount: 0,
+  floorCount: 0,
+  floors: {},
+  lifts: {},
+};
+
 const validateCount = (count) => {
   if (count > 10 || count < 0) {
     return false;
