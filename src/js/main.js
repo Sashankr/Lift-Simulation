@@ -1,24 +1,17 @@
-/*Data Store Design
-
 const dataStore = {
-  liftCount: 0,  // number of lifts
-  floorCount: 0, // number of floors
-  floors: {      // floors object contains all the floors as property and lifts that are currently on that floor. 
-    0: { liftIds : [1] },
-    1: { liftIds : [2,3] },
-    2: { liftIds : [] },
-  },
-  lifts: {       // lifts object contains all the lifts as property and floorId at which each lift is currently. 
-    0: { floorId: 1 },
-    1: { floorId: 3 },
-    2: { floorId: 0 },
-  },
+  floorCount: 0,
+  liftCount: 0,
+  lifts: {},
+  emptyFloors: [],
 };
 
-*/
-
-const dataStore = {};
-console.log(dataStore);
+const updateDataStore = (callback) => {
+  callback();
+  const floorCount = dataStore.floorCount;
+  const liftCount = dataStore.liftCount;
+  console.log(dataStore);
+  buildInteractiveUI(floorCount, liftCount);
+};
 
 const validateCount = (count) => {
   if (count > 10 || count < 0) {
@@ -46,10 +39,10 @@ const floorUI = (floorCount) => {
   floorContainer.innerHTML = `
     <div class="floor-content-container" data-floor=${floorCount}>
       <div class="floor-button-container">
-      <button class="floor-up-button" data-up-button="${floorCount}" >UP</button>
+      <button class="floor-up-button" data-floor-button="${floorCount}" data-floor-direction="up" >UP</button>
       ${
         floorCount !== 0
-          ? `<button class="floor-down-button" data-down-button="${floorCount}">DOWN</button>`
+          ? `<button class="floor-down-button" data-floor-button="${floorCount}" data-floor-direction="down">DOWN</button>`
           : ""
       }
       </div>
@@ -68,6 +61,8 @@ const floorUI = (floorCount) => {
 const liftUi = (liftCount) => {
   const liftContainer = createUIElement("div", "lift-container", false);
   liftContainer.setAttribute("data-lift", liftCount);
+  liftContainer.setAttribute("data-floor-number", 0);
+
   liftContainer.innerHTML = `
     <div class="lift-door-1"></div>
     <div class="lift-door-2"></div>
@@ -75,14 +70,13 @@ const liftUi = (liftCount) => {
   return liftContainer;
 };
 
-const buildInteractiveUI = (liftCount, floorCount) => {
+const buildInteractiveUI = (floorCount, liftCount) => {
   const liftSimulator = document.querySelector(".lift-simulator");
   for (let i = floorCount; i >= 0; i--) {
     const { floorContainer } = floorUI(i);
     appendUIElement(liftSimulator, floorContainer);
   }
   const firstFloor = document.querySelector('[data-floor="0"]');
-
   for (let j = 1; j <= liftCount; j++) {
     const liftContainer = liftUi(j);
     appendUIElement(firstFloor, liftContainer);
@@ -102,11 +96,6 @@ const moveLift = (event, direction) => {
     }
   } else {
     const downButtonId = Number(event.target.getAttribute("data-down-button"));
-    // if (downButtonId === 0) {
-    //   firstLift.style.transform = "translateY(0px)";
-    // } else {
-    //   firstLift.style.transform = `translateY(${downButtonId * offsetValue}px)`;
-    // }
   }
 };
 
@@ -117,7 +106,16 @@ const intialUserInputsHandler = (event) => {
 
   if (validateCount(floorCount) && validateCount(liftCount)) {
     document.querySelector(".lift-simulator__home").classList.add("hide");
-    buildInteractiveUI(liftCount, floorCount);
+    updateDataStore(() => {
+      dataStore.floorCount = floorCount;
+      dataStore.liftCount = liftCount;
+      for (let i = 1; i <= liftCount; i++) {
+        dataStore.lifts[i] = { currentFloor: 0 };
+      }
+      for (let j = 1; j <= floorCount; j++) {
+        dataStore.emptyFloors.push(j);
+      }
+    });
     const floorUpButtons = document.querySelectorAll(".floor-up-button");
     const floorDownButtons = document.querySelectorAll(".floor-down-button");
 
@@ -130,3 +128,5 @@ const intialUserInputsHandler = (event) => {
     );
   }
 };
+
+// 1 : {currentFloor:0}
