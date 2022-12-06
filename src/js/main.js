@@ -5,6 +5,8 @@ const dataStore = {
   emptyFloors: [],
 };
 
+const liftEngine = (direction, floorId) => {};
+
 const updateDataStore = (callback) => {
   callback();
   const floorCount = dataStore.floorCount;
