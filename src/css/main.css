@@ -142,11 +142,11 @@ input {
   opacity: 0.85;
 }
 
-.floor-up-button {
+button[data-floor-direction="up"] {
   background: var(--color-purple-600);
 }
 
-.floor-down-button {
+button[data-floor-direction="down"] {
   background: var(--color-dark-800);
 }
 

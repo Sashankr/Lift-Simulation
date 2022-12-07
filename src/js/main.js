@@ -5,13 +5,17 @@ const dataStore = {
   emptyFloors: [],
 };
 
-const liftEngine = (direction, floorId) => {};
+const liftEngine = (event) => {
+  console.log(event.target);
+  const floorId = Number(event.target.getAttribute("data-floor-button"));
+  const direction = event.target.getAttribute("data-floor-direction");
+  moveLift(direction, floorId, 1);
+};
 
 const updateDataStore = (callback) => {
   callback();
   const floorCount = dataStore.floorCount;
   const liftCount = dataStore.liftCount;
-  console.log(dataStore);
   buildInteractiveUI(floorCount, liftCount);
 };
 
@@ -41,10 +45,10 @@ const floorUI = (floorCount) => {
   floorContainer.innerHTML = `
     <div class="floor-content-container" data-floor=${floorCount}>
       <div class="floor-button-container">
-      <button class="floor-up-button" data-floor-button="${floorCount}" data-floor-direction="up" >UP</button>
+      <button class="floor-button" data-floor-button="${floorCount}" data-floor-direction="up" >UP</button>
       ${
         floorCount !== 0
-          ? `<button class="floor-down-button" data-floor-button="${floorCount}" data-floor-direction="down">DOWN</button>`
+          ? `<button class="floor-button" data-floor-button="${floorCount}" data-floor-direction="down">DOWN</button>`
           : ""
       }
       </div>
@@ -85,20 +89,10 @@ const buildInteractiveUI = (floorCount, liftCount) => {
   }
 };
 
-const moveLift = (event, direction) => {
-  const firstLift = document.querySelector('[data-lift="1"]');
+const moveLift = (direction, floorId, liftId) => {
+  const lift = document.querySelector(`[data-lift="${liftId}"]`);
   const offsetValue = 200;
-
-  if (direction === "up") {
-    const upButtonId = Number(event.target.getAttribute("data-up-button"));
-    if (upButtonId === 0) {
-      firstLift.style.transform = "translateY(0px)";
-    } else {
-      firstLift.style.transform = `translateY(-${upButtonId * offsetValue}px)`;
-    }
-  } else {
-    const downButtonId = Number(event.target.getAttribute("data-down-button"));
-  }
+  lift.style.transform = `translateY(-${floorId * offsetValue}px)`;
 };
 
 const intialUserInputsHandler = (event) => {
@@ -118,17 +112,11 @@ const intialUserInputsHandler = (event) => {
         dataStore.emptyFloors.push(j);
       }
     });
-    const floorUpButtons = document.querySelectorAll(".floor-up-button");
-    const floorDownButtons = document.querySelectorAll(".floor-down-button");
 
-    Array.from(floorUpButtons).forEach((button) =>
-      button.addEventListener("click", (event) => moveLift(event, "up"))
-    );
+    const floorButtons = document.querySelectorAll(".floor-button");
 
-    Array.from(floorDownButtons).forEach((button) =>
-      button.addEventListener("click", (event) => moveLift(event, "down"))
+    Array.from(floorButtons).forEach((button) =>
+      button.addEventListener("click", (event) => liftEngine(event))
     );
   }
 };
-
-// 1 : {currentFloor:0}
