@@ -23,6 +23,10 @@ input {
   font-family: var(--font-secondary);
 }
 
+.lift-simulator {
+  margin-bottom: 1rem;
+}
+
 .page-heading {
   font-family: var(--font-primary);
   font-size: 4rem;

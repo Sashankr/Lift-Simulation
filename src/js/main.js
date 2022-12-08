@@ -1,15 +1,30 @@
 const dataStore = {
   floorCount: 0,
   liftCount: 0,
-  lifts: {},
+  lifts: [],
   emptyFloors: [],
+};
+
+const checkAvailableLifts = () => {
+  const { lifts, emptyFloors } = dataStore;
+  console.log(lifts, emptyFloors);
+
+  const lift = lifts.find((lift) => !emptyFloors.includes(lift.currentFloor));
+  return lift.liftId;
 };
 
 const liftEngine = (event) => {
   console.log(event.target);
   const floorId = Number(event.target.getAttribute("data-floor-button"));
   const direction = event.target.getAttribute("data-floor-direction");
-  moveLift(direction, floorId, 1);
+
+  const liftId = checkAvailableLifts();
+  console.log(liftId);
+
+  moveLift(direction, floorId, liftId);
+  updateDataStore(() => {
+    // dataStore.
+  });
 };
 
 const updateDataStore = (callback) => {
@@ -106,7 +121,7 @@ const intialUserInputsHandler = (event) => {
       dataStore.floorCount = floorCount;
       dataStore.liftCount = liftCount;
       for (let i = 1; i <= liftCount; i++) {
-        dataStore.lifts[i] = { currentFloor: 0 };
+        dataStore.lifts.push({ currentFloor: 0, liftId: i });
       }
       for (let j = 1; j <= floorCount; j++) {
         dataStore.emptyFloors.push(j);
