@@ -13,10 +13,7 @@ const checkAvailableLifts = (floorId) => {
   const stationaryLift = liftList.find((lift) => {
     return lift.getAttribute("ismoving") === "false";
   });
-  const stationaryLiftId = Number(stationaryLift.getAttribute("data-lift"));
-  const liftId = dataStore.lifts.find(
-    (lift) => lift.currentFloor !== floorId && lift.liftId === stationaryLiftId
-  ).liftId;
+  const liftId = Number(stationaryLift.getAttribute("data-lift"));
 
   return liftId;
 };
