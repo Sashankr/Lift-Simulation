@@ -5,11 +5,20 @@ const dataStore = {
   emptyFloors: [],
 };
 
-const checkAvailableLifts = () => {
+const checkAvailableLifts = (floorId) => {
   console.log(dataStore);
   const { lifts, emptyFloors } = dataStore;
-  const lift = lifts.find((lift) => !emptyFloors.includes(lift.currentFloor));
-  return lift.liftId;
+  // const lift = lifts.find((lift) => !emptyFloors.includes(lift.currentFloor));
+  const liftList = Array.from(document.querySelectorAll(".lift-container"));
+  const stationaryLift = liftList.find((lift) => {
+    return lift.getAttribute("ismoving") === "false";
+  });
+  const stationaryLiftId = Number(stationaryLift.getAttribute("data-lift"));
+  const liftId = dataStore.lifts.find(
+    (lift) => lift.currentFloor !== floorId && lift.liftId === stationaryLiftId
+  ).liftId;
+
+  return liftId;
 };
 
 const liftEngine = (event) => {
@@ -17,13 +26,12 @@ const liftEngine = (event) => {
   const floorId = Number(event.target.getAttribute("data-floor-button"));
   const direction = event.target.getAttribute("data-floor-direction");
 
-  const currentLiftId = checkAvailableLifts();
-  console.log(currentLiftId);
+  const currentLiftId = checkAvailableLifts(floorId);
 
   moveLift(direction, floorId, currentLiftId);
+
   updateDataStore(() => {
-    const newData = dataStore.lifts.map((lift) => {
-      debugger;
+    const updatedInformation = dataStore.lifts.map((lift) => {
       if (lift.liftId === currentLiftId) {
         return {
           ...lift,
@@ -33,7 +41,8 @@ const liftEngine = (event) => {
         return lift;
       }
     });
-    dataStore = newData;
+
+    dataStore.lifts = updatedInformation;
   });
 };
 
@@ -90,6 +99,7 @@ const liftUi = (liftCount) => {
   const liftContainer = createUIElement("div", "lift-container", false);
   liftContainer.setAttribute("data-lift", liftCount);
   liftContainer.setAttribute("data-floor-number", 0);
+  liftContainer.setAttribute("ismoving", false);
 
   liftContainer.innerHTML = `
     <div class="lift-door-1"></div>
@@ -114,7 +124,12 @@ const buildInteractiveUI = (floorCount, liftCount) => {
 const moveLift = (direction, floorId, liftId) => {
   const lift = document.querySelector(`[data-lift="${liftId}"]`);
   const offsetValue = 200;
+  lift.setAttribute("ismoving", true);
+
   lift.style.transform = `translateY(-${floorId * offsetValue}px)`;
+  setTimeout(() => {
+    lift.setAttribute("ismoving", false);
+  }, 2500);
 };
 
 const intialUserInputsHandler = (event) => {
@@ -138,8 +153,9 @@ const intialUserInputsHandler = (event) => {
 
     const floorButtons = document.querySelectorAll(".floor-button");
 
-    Array.from(floorButtons).forEach((button) =>
-      button.addEventListener("click", (event) => liftEngine(event))
-    );
+    Array.from(floorButtons).forEach((button) => {
+      button.addEventListener("click", (event) => liftEngine(event));
+      button.addEventListener("dblclick", (event) => event.preventDefault());
+    });
   }
 };
