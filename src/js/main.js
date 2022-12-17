@@ -2,20 +2,34 @@ const dataStore = {
   floorCount: 0,
   liftCount: 0,
   lifts: [],
-  emptyFloors: [],
 };
 
 const checkAvailableLifts = (floorId) => {
   console.log(dataStore);
   const { lifts, emptyFloors } = dataStore;
-  // const lift = lifts.find((lift) => !emptyFloors.includes(lift.currentFloor));
   const liftList = Array.from(document.querySelectorAll(".lift-container"));
   const stationaryLift = liftList.find((lift) => {
     return lift.getAttribute("ismoving") === "false";
   });
-  const liftId = Number(stationaryLift.getAttribute("data-lift"));
+  debugger;
+  const stationaryLiftId = Number(stationaryLift.getAttribute("data-lift"));
+  console.log("stationary", stationaryLiftId);
 
-  return liftId;
+  let collisionFreeLiftId;
+
+  lifts.map((lift) => {
+    if (lift.liftId === stationaryLiftId && lift.currentFloor !== floorId) {
+      collisionFreeLiftId = lift.liftId;
+    } else {
+      return;
+    }
+  });
+
+  console.log(dataStore);
+
+  console.log("collision-free-lift", collisionFreeLiftId);
+
+  return collisionFreeLiftId;
 };
 
 const liftEngine = (event) => {
@@ -142,9 +156,7 @@ const intialUserInputsHandler = (event) => {
       for (let i = 1; i <= liftCount; i++) {
         dataStore.lifts.push({ currentFloor: 0, liftId: i });
       }
-      for (let j = 1; j <= floorCount; j++) {
-        dataStore.emptyFloors.push(j);
-      }
+
       buildInteractiveUI(floorCount, liftCount);
     });
 
