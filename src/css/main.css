@@ -154,6 +154,19 @@ button[data-floor-direction="down"] {
   background: var(--color-dark-800);
 }
 
+button[data-floor-direction="up"]:disabled {
+  color: var(--color-purple-600);
+  background: transparent;
+  border: 1px solid var(--color-purple-600);
+  cursor: unset;
+}
+button[data-floor-direction="down"]:disabled {
+  color: var(--color-dark-800);
+  background: transparent;
+  border: 1px solid var(--color-dark-800);
+  cursor: unset;
+}
+
 .lift-container {
   width: 80px;
   height: 150px;

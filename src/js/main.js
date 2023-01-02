@@ -11,7 +11,6 @@ const checkAvailableLifts = (floorId) => {
   const stationaryLift = liftList.find((lift) => {
     return lift.getAttribute("ismoving") === "false";
   });
-  debugger;
   const stationaryLiftId = Number(stationaryLift.getAttribute("data-lift"));
   console.log("stationary", stationaryLiftId);
 
@@ -134,12 +133,17 @@ const buildInteractiveUI = (floorCount, liftCount) => {
 
 const moveLift = (direction, floorId, liftId) => {
   const lift = document.querySelector(`[data-lift="${liftId}"]`);
+  const liftButtons = Array.from(
+    document.querySelectorAll(`[data-floor-button="${floorId}"]`)
+  );
+  liftButtons.forEach((item) => item.setAttribute("disabled", true));
   const offsetValue = 200;
   lift.setAttribute("ismoving", true);
 
   lift.style.transform = `translateY(-${floorId * offsetValue}px)`;
   setTimeout(() => {
     lift.setAttribute("ismoving", false);
+    liftButtons.forEach((item) => item.removeAttribute("disabled"));
   }, 2500);
 };
 
