@@ -1,3 +1,65 @@
+const dataStore = {
+  floorCount: 0,
+  liftCount: 0,
+  lifts: [],
+};
+
+const checkAvailableLifts = (floorId) => {
+  console.log(dataStore);
+  const { lifts, emptyFloors } = dataStore;
+  const liftList = Array.from(document.querySelectorAll(".lift-container"));
+  const stationaryLift = liftList.find((lift) => {
+    return lift.getAttribute("ismoving") === "false";
+  });
+  const stationaryLiftId = Number(stationaryLift.getAttribute("data-lift"));
+  console.log("stationary", stationaryLiftId);
+
+  let collisionFreeLiftId;
+
+  lifts.map((lift) => {
+    if (lift.liftId === stationaryLiftId && lift.currentFloor !== floorId) {
+      collisionFreeLiftId = lift.liftId;
+    } else {
+      return;
+    }
+  });
+
+  console.log(dataStore);
+
+  console.log("collision-free-lift", collisionFreeLiftId);
+
+  return collisionFreeLiftId;
+};
+
+const liftEngine = (event) => {
+  console.log(event.target);
+  const floorId = Number(event.target.getAttribute("data-floor-button"));
+  const direction = event.target.getAttribute("data-floor-direction");
+
+  const currentLiftId = checkAvailableLifts(floorId);
+
+  moveLift(direction, floorId, currentLiftId);
+
+  updateDataStore(() => {
+    const updatedInformation = dataStore.lifts.map((lift) => {
+      if (lift.liftId === currentLiftId) {
+        return {
+          ...lift,
+          currentFloor: floorId,
+        };
+      } else {
+        return lift;
+      }
+    });
+
+    dataStore.lifts = updatedInformation;
+  });
+};
+
+const updateDataStore = (callback) => {
+  callback();
+};
+
 const validateCount = (count) => {
   if (count > 10 || count < 0) {
     return false;
@@ -24,10 +86,10 @@ const floorUI = (floorCount) => {
   floorContainer.innerHTML = `
     <div class="floor-content-container" data-floor=${floorCount}>
       <div class="floor-button-container">
-      <button class="floor-up-button" data-up-button="${floorCount}" >UP</button>
+      <button class="floor-button" data-floor-button="${floorCount}" data-floor-direction="up" >UP</button>
       ${
         floorCount !== 0
-          ? `<button class="floor-down-button" data-down-button="${floorCount}">DOWN</button>`
+          ? `<button class="floor-button" data-floor-button="${floorCount}" data-floor-direction="down">DOWN</button>`
           : ""
       }
       </div>
@@ -46,6 +108,9 @@ const floorUI = (floorCount) => {
 const liftUi = (liftCount) => {
   const liftContainer = createUIElement("div", "lift-container", false);
   liftContainer.setAttribute("data-lift", liftCount);
+  liftContainer.setAttribute("data-floor-number", 0);
+  liftContainer.setAttribute("ismoving", false);
+
   liftContainer.innerHTML = `
     <div class="lift-door-1"></div>
     <div class="lift-door-2"></div>
@@ -53,39 +118,33 @@ const liftUi = (liftCount) => {
   return liftContainer;
 };
 
-const buildInteractiveUI = (liftCount, floorCount) => {
+const buildInteractiveUI = (floorCount, liftCount) => {
   const liftSimulator = document.querySelector(".lift-simulator");
   for (let i = floorCount; i >= 0; i--) {
     const { floorContainer } = floorUI(i);
     appendUIElement(liftSimulator, floorContainer);
   }
   const firstFloor = document.querySelector('[data-floor="0"]');
-
   for (let j = 1; j <= liftCount; j++) {
     const liftContainer = liftUi(j);
     appendUIElement(firstFloor, liftContainer);
   }
 };
 
-const moveLift = (event, direction) => {
-  const firstLift = document.querySelector('[data-lift="1"]');
+const moveLift = (direction, floorId, liftId) => {
+  const lift = document.querySelector(`[data-lift="${liftId}"]`);
+  const liftButtons = Array.from(
+    document.querySelectorAll(`[data-floor-button="${floorId}"]`)
+  );
+  liftButtons.forEach((item) => item.setAttribute("disabled", true));
   const offsetValue = 200;
+  lift.setAttribute("ismoving", true);
 
-  if (direction === "up") {
-    const upButtonId = Number(event.target.getAttribute("data-up-button"));
-    if (upButtonId === 0) {
-      firstLift.style.transform = "translateY(0px)";
-    } else {
-      firstLift.style.transform = `translateY(-${upButtonId * offsetValue}px)`;
-    }
-  } else {
-    const downButtonId = Number(event.target.getAttribute("data-down-button"));
-    // if (downButtonId === 0) {
-    //   firstLift.style.transform = "translateY(0px)";
-    // } else {
-    //   firstLift.style.transform = `translateY(${downButtonId * offsetValue}px)`;
-    // }
-  }
+  lift.style.transform = `translateY(-${floorId * offsetValue}px)`;
+  setTimeout(() => {
+    lift.setAttribute("ismoving", false);
+    liftButtons.forEach((item) => item.removeAttribute("disabled"));
+  }, 2500);
 };
 
 const intialUserInputsHandler = (event) => {
@@ -95,16 +154,21 @@ const intialUserInputsHandler = (event) => {
 
   if (validateCount(floorCount) && validateCount(liftCount)) {
     document.querySelector(".lift-simulator__home").classList.add("hide");
-    buildInteractiveUI(liftCount, floorCount);
-    const floorUpButtons = document.querySelectorAll(".floor-up-button");
-    const floorDownButtons = document.querySelectorAll(".floor-down-button");
+    updateDataStore(() => {
+      dataStore.floorCount = floorCount;
+      dataStore.liftCount = liftCount;
+      for (let i = 1; i <= liftCount; i++) {
+        dataStore.lifts.push({ currentFloor: 0, liftId: i });
+      }
 
-    Array.from(floorUpButtons).forEach((button) =>
-      button.addEventListener("click", (event) => moveLift(event, "up"))
-    );
+      buildInteractiveUI(floorCount, liftCount);
+    });
 
-    Array.from(floorDownButtons).forEach((button) =>
-      button.addEventListener("click", (event) => moveLift(event, "down"))
-    );
+    const floorButtons = document.querySelectorAll(".floor-button");
+
+    Array.from(floorButtons).forEach((button) => {
+      button.addEventListener("click", (event) => liftEngine(event));
+      button.addEventListener("dblclick", (event) => event.preventDefault());
+    });
   }
 };
